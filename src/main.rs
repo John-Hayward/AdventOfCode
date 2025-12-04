@@ -1,7 +1,7 @@
-mod file_loader;
-mod day1;
-mod day2;
-mod day3;
+mod file_utils;
+mod year2025;
+
+use crate::year2025::*;
 use text_io::read;
 
 fn main() {
@@ -12,6 +12,7 @@ fn main() {
         1 => day1::solve(),
         2 => day2::solve(),
         3 => day3::solve(),
+        4 => day4::solve(),
         _ => println!("Day {} is not yet implemented.", input),
     }
 }

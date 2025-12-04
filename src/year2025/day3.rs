@@ -1,4 +1,4 @@
-use crate::file_loader::read_lines_to_vec;
+use crate::file_utils::file_loader::read_lines_to_vec;
 
 pub fn solve() {
     let response_sample_1: i64 = calculate_max_joltage("inputs/samples/day3.txt", 1);
@@ -20,7 +20,7 @@ fn calculate_max_joltage(filename: &str, part: i64) -> i64 {
         2 => 12,
         _ => panic!("Invalid part number: {}", part),
     };
-    for label in labels{
+    for label in labels {
         let max_joltage = calculate_for_label(&label, number_values);
         count += max_joltage;
     }
@@ -40,12 +40,16 @@ fn find_max_value_and_index(values: &Vec<i64>) -> (i64, usize) {
 }
 
 fn calculate_for_label(label: &str, number_values: i64) -> i64 {
-    let values: Vec<i64> = label.chars().map(|v| v.to_digit(10).unwrap() as i64).collect();
+    let values: Vec<i64> = label
+        .chars()
+        .map(|v| v.to_digit(10).unwrap() as i64)
+        .collect();
     let num_values: usize = values.len();
     let mut current_index: usize = 0;
     let mut current_value: i64 = 0;
     for i in (0..number_values as usize).rev() {
-        let (max_value, max_index) = find_max_value_and_index(&values[current_index..num_values-i].to_vec());
+        let (max_value, max_index) =
+            find_max_value_and_index(&values[current_index..num_values - i].to_vec());
         current_index += max_index + 1;
         current_value *= 10;
         current_value += max_value;
