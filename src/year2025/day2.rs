@@ -1,4 +1,4 @@
-use crate::file_loader::read_comma_seperated_values;
+use crate::file_utils::file_loader::read_comma_seperated_values;
 
 #[derive(Debug)]
 struct IdRange {
@@ -40,22 +40,28 @@ pub fn count_faulty_ids(filename: &str, part: i8) -> i64 {
 
 fn parse_input_to_id_ranges(filename: &str) -> Vec<IdRange> {
     let values: Vec<String> = read_comma_seperated_values(filename);
-    values.iter().map(|x| {
-        let parts: Vec<&str> = x.split('-').collect();
-        IdRange {
-            min: parts[0].parse::<i64>().unwrap(),
-            max: parts[1].parse::<i64>().unwrap(),
-        }
-    }).collect()
+    values
+        .iter()
+        .map(|x| {
+            let parts: Vec<&str> = x.split('-').collect();
+            IdRange {
+                min: parts[0].parse::<i64>().unwrap(),
+                max: parts[1].parse::<i64>().unwrap(),
+            }
+        })
+        .collect()
 }
 
 fn is_repeated_digit(id: i64) -> bool {
-    if (id as f64).log(10f64).floor() % 2.0 == 0.0{
+    if (id as f64).log(10f64).floor() % 2.0 == 0.0 {
         return false;
     }
     let id_str = id.to_string();
     let id_str_len: usize = id_str.len();
-    if id_str[0..id_str_len/2].chars().eq(id_str[id_str_len/2..id_str_len].chars()) {
+    if id_str[0..id_str_len / 2]
+        .chars()
+        .eq(id_str[id_str_len / 2..id_str_len].chars())
+    {
         return true;
     }
     false
@@ -72,11 +78,11 @@ fn is_any_repeated_digit(id: i64) -> bool {
             continue;
         }
         let string_slice = &id_str[0..(factor as usize)];
-        if id_str.eq(&string_slice.repeat(id_str_len/(factor as usize))) {
+        if id_str.eq(&string_slice.repeat(id_str_len / (factor as usize))) {
             return true;
         }
     }
-    
+
     false
 }
 

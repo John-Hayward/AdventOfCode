@@ -1,4 +1,4 @@
-use crate::file_loader::read_lines_to_vec;
+use crate::file_utils::file_loader::read_lines_to_vec;
 
 #[derive(Debug)]
 pub struct Rotation {
@@ -6,7 +6,7 @@ pub struct Rotation {
     degrees: i32,
 }
 
-pub fn solve(){
+pub fn solve() {
     let response_sample_1: i32 = solve_part1("inputs/samples/day1.txt", 50);
     println!("Day 1 - Part 1 Sample: {}", response_sample_1);
     let response_part_1: i32 = solve_part1("inputs/day1.txt", 50);
@@ -48,14 +48,18 @@ fn solve_part2(filename: &str, starting_value: i32) -> i32 {
             'R' => {
                 num_zeros += (current_value + rotation.degrees) / 100;
                 current_value = ((current_value + rotation.degrees) % 100 + 100) % 100;
-            },
+            }
             'L' => {
-                let t0: i32 = if current_value == 0 {100} else {current_value};
+                let t0: i32 = if current_value == 0 {
+                    100
+                } else {
+                    current_value
+                };
                 if rotation.degrees >= t0 {
                     num_zeros += (rotation.degrees - t0) / 100 + 1;
                 }
                 current_value = ((current_value - rotation.degrees) % 100 + 100) % 100;
-            },
+            }
             _ => panic!("Unexpected rotation direction: {}", rotation.direction),
         }
     }
@@ -64,9 +68,17 @@ fn solve_part2(filename: &str, starting_value: i32) -> i32 {
 
 pub fn generate_rotations(filename: &str) -> Vec<Rotation> {
     let mut file_input: Vec<String> = read_lines_to_vec(filename);
-    file_input.iter().map(|x|
-        Rotation{
+    file_input
+        .iter()
+        .map(|x| Rotation {
             direction: x.chars().take(1).next().unwrap(),
-            degrees: x.chars().skip(1).into_iter().collect::<String>().parse::<i32>().unwrap(),}
-    ).collect()
+            degrees: x
+                .chars()
+                .skip(1)
+                .into_iter()
+                .collect::<String>()
+                .parse::<i32>()
+                .unwrap(),
+        })
+        .collect()
 }
